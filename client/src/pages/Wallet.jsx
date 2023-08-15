@@ -14,7 +14,7 @@ const Wallet =({saveState})=>{
               const accounts = await window.ethereum.request({
                 method:"eth_requestAccounts"
               })
-              const contractAddress =  import.meta.env.CONTRACT_ADDRESS;
+              const contractAddress =  import.meta.env.VITE_CONTRACT_ADDRESS;
               const contract = new web3.eth.Contract(ABI,contractAddress);
               saveState({web3:web3,contract:contract,account:accounts[0]})
               navigateTo("/view-all-tasks")

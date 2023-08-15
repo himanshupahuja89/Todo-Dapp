@@ -28,9 +28,9 @@ const DeleteTask = ({ state }) => {
       let apiEndpoint = "";
 
       if (deleting) {
-        apiEndpoint = `http://localhost:3000/api/ethereum/delete-task/${taskID}`;
+        apiEndpoint = `${import.meta.env.VITE_BASE_URL}/api/ethereum/delete-task/${taskID}`;
       } else {
-        apiEndpoint = `http://localhost:3000/api/ethereum/view-task/${taskID}`;
+        apiEndpoint = `${import.meta.env.VITE_BASE_URL}/api/ethereum/view-task/${taskID}`;
       }
 
       const res = await fetch(apiEndpoint, {

@@ -34,7 +34,7 @@ const CreateTask = ({ state }) => {
     const taskDate = document.querySelector("#taskDate").value;
     try {
       const res = await fetch(
-        "http://localhost:3000/api/ethereum/create-task",
+        `${import.meta.env.VITE_BASE_URL}/api/ethereum/create-task`,
         {
           method: "POST",
           headers: {

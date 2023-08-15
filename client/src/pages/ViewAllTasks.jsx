@@ -23,7 +23,7 @@ const ViewAllTasks = ({ state }) => {
       } else {
         try {
           const res = await fetch(
-            "http://localhost:3000/api/ethereum/view-all-task",
+            `${import.meta.env.VITE_BASE_URL}/api/ethereum/view-all-task`,
             {
               method: "POST",
               headers: {

@@ -40,7 +40,7 @@ const UpdateTask = ({ state }) => {
     } else {
       try {
         const res = await fetch(
-          "http://localhost:3000/api/ethereum/update-task",
+          `${import.meta.env.VITE_BASE_URL}/api/ethereum/update-task`,
           {
             method: "POST",
             headers: {

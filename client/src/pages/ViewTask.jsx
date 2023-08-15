@@ -23,7 +23,7 @@ const ViewTask = ({ state }) => {
       event.preventDefault();
       const taskID = document.querySelector("#taskID").value;
       const res = await fetch(
-        `http://localhost:3000/api/ethereum/view-task/${taskID}`,
+        `${import.meta.env.VITE_BASE_URL}/api/ethereum/view-task/${taskID}`,
         {
           method: "POST",
           headers: {
