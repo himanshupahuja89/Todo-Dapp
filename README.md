@@ -18,6 +18,7 @@ Follow the steps below to set up the BERN Project on your local machine:
 4. Install server dependencies: `npm install`
 5. Navigate to the `client` folder: `cd client`
 6. Install client dependencies: `npm install`
+7. Make sure you have metamask installed in your browser.
 
 ## Usage
 
@@ -26,6 +27,9 @@ To run the BERN Project, follow these instructions:
 1. Start the server: `npm start`
 2. In a separate terminal, start the client: `npm run dev`
 3. The server will run on http://localhost:3000 and the client on http://localhost:5173
+
+# Info
+1. Smart Contract deployed on Avalanche fuji testnet. ( Smart Contract Address - 0x2C4C0655dB8eFD1f7E72118005230609783e6d42)
 
 ## Technologies Used
 
