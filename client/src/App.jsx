@@ -7,6 +7,7 @@ import UpdateTask from './pages/UpdateTask'
 import ViewTask from './pages/ViewTask'
 import DeleteTask from './pages/DeleteTask';
 
+
 import './App.css'
 
 function App() {
@@ -17,9 +18,9 @@ function App() {
   }
   const router = createBrowserRouter([
     {path:'/',element:<Wallet saveState={saveState}/>},
-    {path:'/view-all-tasks',element:<ViewAllTasks/>},
+    {path:'/view-all-tasks',element:<ViewAllTasks state={state}/>},
     {path:'/create-task',element:<CreateTask state={state}/>},
-    {path:'/view-task',element:<ViewTask/>},
+    {path:'/view-task',element:<ViewTask state={state}/>},
     {path:'/update-task',element:<UpdateTask state={state}/>},
     {path:'/delete-task',element:<DeleteTask state={state}/>}
   ])

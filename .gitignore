@@ -2,3 +2,5 @@ backend/node_modules
 backend/smart-contract/node_modules
 client/node_modules
 backend/smart-contract/.env
+backend/.env
+client/.env

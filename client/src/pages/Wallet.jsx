@@ -2,6 +2,9 @@ import PropTypes from 'prop-types';
 import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import ABI from "./ABI.json"
+// import dotenv from 'dotenv';
+// dotenv.config()
+
 const Wallet =({saveState})=>{
     const navigateTo =useNavigate();
     const connectWallet =async()=>{
@@ -11,7 +14,7 @@ const Wallet =({saveState})=>{
               const accounts = await window.ethereum.request({
                 method:"eth_requestAccounts"
               })
-              const contractAddress = "0x428B7512281fC053B8ab39631b5C0023b441AC86";
+              const contractAddress =  import.meta.env.CONTRACT_ADDRESS;
               const contract = new web3.eth.Contract(ABI,contractAddress);
               saveState({web3:web3,contract:contract,account:accounts[0]})
               navigateTo("/view-all-tasks")

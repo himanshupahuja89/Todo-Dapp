@@ -9,8 +9,8 @@ const dateclashCheck = async (taskDate) => {
     return "No Task Found";
 }
 
-const priorityCheck = async (id) => {
-    const tasks = await contract.methods.allTask().call();
+const priorityCheck = async (id, account) => {
+    const tasks = await contract.methods.allTask().call({from: account});
     const result = tasks[id - 1].name.includes("priority")
     return result;
 }

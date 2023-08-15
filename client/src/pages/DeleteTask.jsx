@@ -1,5 +1,5 @@
 import Navigation from "../components/Navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const DeleteTask = ({ state }) => {
@@ -8,6 +8,17 @@ const DeleteTask = ({ state }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [deleting, setDeleting] = useState(false); // Flag to indicate delete mode
+  const [redirectToWallet, setredirectToWallet] = useState(false);
+
+  const { contract, account } = state;
+
+  useEffect(() => {
+    if (!contract || !account) {
+      setModalContent("Please connect your wallet.");
+      setModalVisible(true);
+      setredirectToWallet(true);
+    }
+  }, []);
 
   const handleTask = async (event) => {
     try {
@@ -23,10 +34,12 @@ const DeleteTask = ({ state }) => {
       }
 
       const res = await fetch(apiEndpoint, {
-        method: deleting ? "DELETE" : "GET",
+        method: deleting ? "DELETE" : "POST",
         headers: {
           "content-type": "application/json",
         },
+        body: JSON.stringify({ account }),
+
       });
       if (res.status === 204 && deleting) {
         // Delete success, reset state
@@ -63,8 +76,11 @@ const DeleteTask = ({ state }) => {
   const closeModal = () => {
     setModalVisible(false);
     setModalContent("");
-    navigate("/view-all-tasks");
-
+    if (redirectToWallet == true) {
+      navigate("/");
+    } else {
+      navigate("/view-all-tasks");
+    }
   };
   return (
     <>

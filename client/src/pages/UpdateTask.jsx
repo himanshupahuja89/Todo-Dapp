@@ -1,50 +1,73 @@
-import {useState} from "react";
+import { useEffect, useState } from "react";
 import Navigation from "../components/Navigation";
-const UpdateTask =({state})=>{
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalContent, setModalContent] = useState("");
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-    const closeModal = () => {
-      setModalVisible(false);
-      setModalContent("");
-    };
-  
-    const {contract,account}=state;
-    const updateTask=async(event)=>{
-        event.preventDefault();
-        const taskName = document.querySelector("#taskName").value;
-        const taskDate = document.querySelector("#taskDate").value;
-        const taskID = document.querySelector("#taskID").value;
+const UpdateTask = ({ state }) => {
+  const navigate = useNavigate(); // Initialize useNavigate
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [redirectToWallet, setredirectToWallet] = useState(false);
 
-        try{
-          const res = await fetch(
-            "http://localhost:3000/api/ethereum/update-task",
-            {
-                method:"POST",
-                headers:{
-                    "content-type":"application/json"
-                },
-                body:JSON.stringify({taskDate:taskDate})
-            }
-          )
-          const data = await res.json();
-          console.log(data)
-          if(data.status===200){
-            await contract.methods.updateTask(taskID,taskName,taskDate).send({from:account});
-            setModalContent(
-              `Task ID ${taskID} updated with task name ${taskName} and date ${taskDate}`
-            );
-            setModalVisible(true);
-          }else{
-            throw new Error("Task cannot be updated because of date clash")
-          }
-
-        }catch (error) {
-          setModalContent("Task cannot be updated");
-          setModalVisible(true);
-        }
+  const closeModal = () => {
+    setModalVisible(false);
+    setModalContent("");
+    if (redirectToWallet == true) {
+      setredirectToWallet(false);
+      navigate("/");
     }
-    return(
+  };
+  useEffect(() => {
+    if (!contract || !account) {
+      setModalContent("Please connect your wallet.");
+      setModalVisible(true);
+      setredirectToWallet(true);
+    }
+  }, []);
+
+  const { contract, account } = state;
+
+  const updateTask = async (event) => {
+    event.preventDefault();
+    const taskName = document.querySelector("#taskName").value;
+    const taskDate = document.querySelector("#taskDate").value;
+    const taskID = document.querySelector("#taskID").value;
+
+    if (!contract || !account) {
+      setModalContent("Please connect your wallet.");
+      setModalVisible(true);
+      setredirectToWallet(true);
+      return;
+    } else {
+      try {
+        const res = await fetch(
+          "http://localhost:3000/api/ethereum/update-task",
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({ taskDate: taskDate }),
+          }
+        );
+        const data = await res.json();
+        if (data.status === 200) {
+          await contract.methods
+            .updateTask(taskID, taskName, taskDate)
+            .send({ from: account });
+          setModalContent(
+            `Task ID ${taskID} updated with task name ${taskName} and date ${taskDate}`
+          );
+          setModalVisible(true);
+        } else {
+          throw new Error("Task cannot be updated because of date clash");
+        }
+      } catch (error) {
+        setModalContent("Task cannot be updated");
+        setModalVisible(true);
+      }
+    }
+  };
+  return (
     <>
       <Navigation />
       <div className="update_task todo_btn">
@@ -77,5 +100,5 @@ const UpdateTask =({state})=>{
       </div>
     </>
   );
-}
+};
 export default UpdateTask;

@@ -1,18 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navigation from "../components/Navigation";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const CreateTask = ({ state }) => {
+  const { contract, account } = state;
   const navigate = useNavigate(); // Initialize useNavigate
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
+  const [redirectToWallet, setredirectToWallet] = useState(false);
 
   const closeModal = () => {
     setModalOpen(false);
     setModalContent("");
-    navigate("/view-all-tasks"); 
-
+    if (redirectToWallet == true) {
+      setredirectToWallet(false);
+      navigate("/");
+    } else {
+      navigate("/view-all-tasks");
+    }
   };
+  useEffect(() => {
+    if (!contract || !account) {
+      setModalContent("Please connect your wallet.");
+      setModalOpen(true);
+      setredirectToWallet(true);
+    }
+  }, []);
 
   const createTask = async (event) => {
     event.preventDefault();
@@ -30,20 +43,20 @@ const CreateTask = ({ state }) => {
           body: JSON.stringify({ taskDate: taskDate }),
         }
       );
-      console.log(account);
       const data = await res.json();
       if (data.status === 200) {
         if (contract && contract.methods) {
           await contract.methods
             .createTask(taskName, taskDate)
             .send({ from: account });
-            setModalContent(`Task ${taskName} added at ${taskDate}`);
+          setModalContent(`Task ${taskName} added at ${taskDate}`);
         }
       } else {
         alert("Task cannot be added");
       }
     } catch (error) {
       setModalContent(`Task already exists at ${taskDate}`);
+      console.error(error);
     } finally {
       setModalOpen(true);
     }

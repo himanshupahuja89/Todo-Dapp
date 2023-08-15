@@ -29,7 +29,8 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
     try {
         const { taskId } = req.params;
-        const isTrue = await priorityCheck(taskId);
+        const { account } = req.body; // Extract the user address from the request body
+        const isTrue = await priorityCheck(taskId, account);
         if (isTrue) {
             res.status(403).json({ status: 403, message: "Task cannot be deleted" })
         } else {
@@ -42,9 +43,8 @@ const deleteTask = async (req, res) => {
 const viewTask = async (req, res) => {
     try {
         const { taskId } = req.params;
-        console.log("This is the task Id",taskId)
-        const task = await contract.methods.viewTask(taskId).call();
-        console.log("TASK", task)
+        const { account } = req.body; // Extract the user address from the request body
+        const task = await contract.methods.viewTask(taskId).call({from: account});
         const { id, name, date } = task;
         const numId = Number(id);
         const taskObj = {
@@ -58,8 +58,8 @@ const viewTask = async (req, res) => {
 }
 const allTasks = async (req, res) => {
     try {
-        const tasks = await contract.methods.allTask().call();
-        console.log("ALLLLLL TASKKKKKS", tasks)
+        const { account } = req.body; // Extract the user address from the request body
+        const tasks = await contract.methods.allTask().call({from: account});
         if (tasks.length < 0) {
             res.status(404).json({ status: 404, message: "Task list does not exist" })
         } else {
